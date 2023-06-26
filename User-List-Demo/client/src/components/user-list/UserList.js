@@ -28,42 +28,28 @@ export const UserList = () => {
           });
     }
 
+    const createUserOpenHandler = () => {
+
+       setUserAction({
+         action: UserActions.Add
+       });
+    }
 
     const closeHandler = () => {
 
         setUserAction({ user: null, action: null });
     }
 
-    const userCreateHandler = (e) => {
-  
-        e.preventDefault();
+    const userCreateHandler = (userData) => {
 
-        const formData = new FormData(e.target);
-
-        const { 
-            firstName, 
-            lastName, 
-            email,
-            imageUrl, 
-            phoneNumber, 
-            ...address 
-        } = Object.fromEntries(formData);
-
-        const userData = {
-            firstName, 
-            lastName, 
-            email,
-            imageUrl, 
-            phoneNumber, 
-            address,
-        };
-
-        console.log(userData);
 
         UserService.create(userData)
             .then(user => {
                 setUsers(oldUsers => [...oldUsers, user]);
                 closeHandler();
+            })
+            .catch(err => {
+                console.log(err);
             });
 
 
@@ -200,7 +186,7 @@ export const UserList = () => {
                 </table>
           </div>
 
-          <button className="btn-add btn" onClick={() => userActionClickHandler(null, UserActions.Add)}>Add new user</button>
+          <button className="btn-add btn" onClick={createUserOpenHandler}>Add new user</button>
         </>
 
 
