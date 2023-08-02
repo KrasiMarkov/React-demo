@@ -2,13 +2,15 @@
 import styles from './App.module.css';
 import { CreateTask } from './components/CreateTask';
 import { TaskList } from './components/TaskList';
+import { TaskContext } from './contexts/TaskContext';
 import { useFetch } from './hooks/useFetch';
+import { useTodosApi } from './hooks/useTodosApi';
 
 
 function App() {
 
   const [tasks, setTasks, isLoading] = useFetch('http://localhost:3030/jsonstore/todos', []);
-
+  const { removeTodo } = useTodosApi();
   
   const taskCreateHandler = (newTask) => {
 
@@ -23,10 +25,15 @@ function App() {
 
   const taskDeleteHandler = (taskId) => {
 
-    setTasks(state => state.filter(x => x._id != taskId));
+    removeTodo(taskId)
+      .then(result => {
+        setTasks(state => state.filter(x => x._id != taskId));
+      });
+
   }
 
   return (
+    <TaskContext.Provider value={{tasks, taskDeleteHandler}}>
     <div className={styles['site-wrapper']}>
           <header>
              <h1>TODO App</h1>
@@ -35,12 +42,13 @@ function App() {
           <main>
             {isLoading 
              ? <p>Loading.......</p>
-             : <TaskList tasks={tasks} taskDeleteHandler={taskDeleteHandler}/>
+             : <TaskList/>
             }
               
               <CreateTask taskCreateHandler={taskCreateHandler}/>
           </main>
     </div>
+    </TaskContext.Provider>
   );
 }
 

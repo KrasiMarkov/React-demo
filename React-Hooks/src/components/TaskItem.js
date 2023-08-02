@@ -1,8 +1,11 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { TaskContext } from "../contexts/TaskContext";
 
+export const TaskItem = ({title, taskId}) => {
+ 
+    const { taskDeleteHandler } = useContext(TaskContext);
 
-export const TaskItem = ({title, taskDeleteHandler, taskId}) => {
-
+    
 
     useEffect(() => {
       
