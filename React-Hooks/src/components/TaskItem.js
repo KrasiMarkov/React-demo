@@ -1,9 +1,10 @@
 import { useContext, useEffect } from "react";
 import { TaskContext } from "../contexts/TaskContext";
+import styles from './TaskItem.module.css';
 
-export const TaskItem = ({title, taskId}) => {
+export const TaskItem = ({task}) => {
  
-    const { taskDeleteHandler } = useContext(TaskContext);
+    const { taskDeleteHandler, toggleTask } = useContext(TaskContext);
 
     
 
@@ -16,10 +17,17 @@ export const TaskItem = ({title, taskId}) => {
         }
     }, []);
 
+
+    const classNames = [
+        task.isCompleted ? styles.completed : '',
+        styles['task-item']
+    ]
+
     return(
         <li>
-            {title}
-            <button onClick={() => taskDeleteHandler(taskId)}>x</button>
+            
+            <span className={classNames.join(' ')} onClick={() => toggleTask(task._id)}>{task.title}</span>
+            <button onClick={() => taskDeleteHandler(task._id)}>x</button>
         </li>
     );
 }

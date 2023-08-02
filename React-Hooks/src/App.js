@@ -10,17 +10,23 @@ import { useTodosApi } from './hooks/useTodosApi';
 function App() {
 
   const [tasks, setTasks, isLoading] = useFetch('http://localhost:3030/jsonstore/todos', []);
-  const { removeTodo } = useTodosApi();
+  const { removeTodo, createTodo } = useTodosApi();
   
   const taskCreateHandler = (newTask) => {
 
-    setTasks(state => [
-      ...state,
-      {
-        _id: state[state.length - 1]?._id + 1 || 1,
-        title: newTask
-      }
-    ]);
+    createTodo(newTask)
+      .then(result => {
+        setTasks(state => [
+          ...state,
+          result
+        ]);
+      })
+
+   
+  }
+
+  const toggleTask = (taskId) => {
+      setTasks(state => state.map(x => x._id == taskId ? {...x, isCompleted: !x.isCompleted} : x));
   }
 
   const taskDeleteHandler = (taskId) => {
@@ -33,7 +39,7 @@ function App() {
   }
 
   return (
-    <TaskContext.Provider value={{tasks, taskDeleteHandler}}>
+    <TaskContext.Provider value={{tasks, taskDeleteHandler, toggleTask}}>
     <div className={styles['site-wrapper']}>
           <header>
              <h1>TODO App</h1>
