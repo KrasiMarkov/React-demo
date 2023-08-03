@@ -26,7 +26,7 @@ export const TaskItem = ({task}) => {
     return(
         <li>
             
-            <span className={classNames.join(' ')} onClick={() => toggleTask(task._id)}>{task.title}</span>
+            <span className={classNames.join(' ')} onClick={() => toggleTask(task)}>{task.title}</span>
             <button onClick={() => taskDeleteHandler(task._id)}>x</button>
         </li>
     );
