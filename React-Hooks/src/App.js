@@ -45,8 +45,18 @@ function App() {
 
   }
 
+  const taskEditHandler = (task, newTitle) => {
+
+    const updatedTask = {...task, title: newTitle};
+
+      updateTodo(task._id, updatedTask)
+        .then(result => {
+          setTasks(state => state.map(x => x._id == task._id ? updatedTask : x));
+        })
+  }
+
   return (
-    <TaskContext.Provider value={{tasks, taskDeleteHandler, toggleTask}}>
+    <TaskContext.Provider value={{tasks, taskDeleteHandler, toggleTask, taskEditHandler}}>
     <div className={styles['site-wrapper']}>
           <header>
              <h1>TODO App</h1>
